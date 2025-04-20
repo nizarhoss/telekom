@@ -49,15 +49,37 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# Set environment variables to avoid tiktoken cache permission issues
+os.environ["TIKTOKEN_CACHE_DIR"] = "/tmp/tiktoken_cache"
+os.environ["TRANSFORMERS_CACHE"] = "/tmp/transformers_cache"
+os.environ["HF_HOME"] = "/tmp/hf_home"
+os.environ["XDG_CACHE_HOME"] = "/tmp/xdg_cache"
+
+# Get API key from Streamlit secrets or environment variables
+try:
+    OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
+except:
+    OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+    if not OPENAI_API_KEY:
+        st.error("OpenAI API key not found. Please set it in the Streamlit secrets or as an environment variable.")
+
+# Set OpenAI API key
+os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+
 # Cache the index loading so it only happens once
 @st.cache_resource
 def load_vector_index():
     """Load the LlamaIndex from storage"""
     try:
-        # Set OpenAI API key from config
-        os.environ['OPENAI_API_KEY'] = st.secrets["OPENAI_API_KEY"]
-
-
+        # Check if index directory exists
+        if not os.path.exists("index_10k_storage"):
+            st.error("The index_10k_storage directory doesn't exist. Please make sure it's correctly uploaded.")
+            return None
+            
+        # Print the contents of the directory for debugging
+        st.write("Index directory contents:")
+        st.write(os.listdir("index_10k_storage"))
+        
         # Load the index from storage
         storage_context = StorageContext.from_defaults(persist_dir="index_10k_storage")
         index = load_index_from_storage(storage_context)
@@ -65,7 +87,6 @@ def load_vector_index():
         return index
     except Exception as e:
         st.error(f"Error loading index: {str(e)}")
-        st.error("Please check that your index_10k_storage directory exists and contains a valid index.")
         return None
 
 # Function to query the index
@@ -90,12 +111,18 @@ def main():
     # App header with logo
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        st.image("logo.png", width=150)  # Replace with your actual logo
+        # Try to load logo, but don't fail if it doesn't exist
+        try:
+            st.image("logo.png", width=150)
+        except:
+            st.write("📊")  # Fallback emoji if no logo
+            
         st.markdown('<h1 class="main-header">Telecom 10-K Analyzer</h1>', unsafe_allow_html=True)
         st.markdown('<p class="subtitle">Explore and analyze insights from telecom company annual reports</p>', unsafe_allow_html=True)
     
     # Load the index
-    index = load_vector_index()
+    with st.spinner("Loading index..."):
+        index = load_vector_index()
     
     # Display a warning if the index isn't loaded
     if not index:
