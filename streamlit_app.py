@@ -159,28 +159,24 @@ def main():
                 st.write(response)
     
     # About This Project section
-    st.markdown('<h2 class="info-header">About This Project</h2>', unsafe_allow_html=True)
+    st.markdown('<h4 class="info-header">About This Project</h2>', unsafe_allow_html=True)
+    
+    
+    st.markdown('<h5 class="info-subheader">Purpose</h3>', unsafe_allow_html=True)
     st.write("""
-    This application was created to demonstrate the power of LlamaIndex and Large Language Models for analyzing 
-    financial documents. It leverages natural language processing to extract insights from telecom company 10-K filings.
+    I wanted to try vectorizing and indexing from my own subset of information. This can be scaled up in leveraging different bodies of text.
     """)
     
-    st.markdown('<h3 class="info-subheader">Purpose</h3>', unsafe_allow_html=True)
+    st.markdown('<h5 class="info-subheader">How It Works</h3>', unsafe_allow_html=True)
     st.write("""
-    The goal of this project is to make corporate financial information more accessible and understandable. 
-    By using AI to analyze complex 10-K filings, users can quickly find relevant information without having to 
-    read hundreds of pages of financial documents.
-    """)
-    
-    st.markdown('<h3 class="info-subheader">How It Works</h3>', unsafe_allow_html=True)
-    st.write("""
-    The application uses LlamaIndex to create a searchable knowledge base from the text of telecom companies' 
+    The application uses LlamaIndex to create a searchable knowledge base from the text of telecom companies'  
     10-K filings. When you ask a question, the system retrieves the most relevant information from these filings 
     and uses OpenAI's language models to generate a human-readable response.
     """)
     
-    st.markdown('<h3 class="info-subheader">Data Sources</h3>', unsafe_allow_html=True)
+    st.markdown('<h5 class="info-subheader">Data Sources</h3>', unsafe_allow_html=True)
     st.write("""
+    Using the SEC EDGAR API, I pulled information from 10K reports for companies in the Telecom industry.
     This demo includes 10-K filings from major telecom companies including T-Mobile (TMUS), AT&T (T), 
     Verizon (VZ), and EchoStar (SATS).
     """)
