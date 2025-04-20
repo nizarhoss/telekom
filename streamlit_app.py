@@ -164,7 +164,7 @@ def main():
     
     st.markdown('<h5 class="info-subheader">Purpose</h3>', unsafe_allow_html=True)
     st.write("""
-    I wanted to try vectorizing and indexing from my own subset of information. This can be scaled up in leveraging different bodies of text.
+    I wanted to try vectorizing and indexing from my own subset of information. This can be scaled up in leveraging different bodies of text such as using Whisper API to transcribe customer service interactions and indexing/vectorizing the conversations for internal customer service analytics.
     """)
     
     st.markdown('<h5 class="info-subheader">How It Works</h3>', unsafe_allow_html=True)
