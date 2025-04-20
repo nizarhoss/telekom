@@ -90,22 +90,25 @@ def load_vector_index():
         return None
 
 # Function to query the index
+# For more precise control
 def query_index(index, query_text):
-    """Query the index and return the response"""
     if not index:
         return "Error: Index not loaded properly."
     
     try:
-        # Create query engine
         query_engine = index.as_query_engine()
+        response_obj = query_engine.query(query_text)
         
-        # Execute the query
-        response = query_engine.query(query_text)
-        
-        return response
+        # Extract only the text response
+        if hasattr(response_obj, 'response'):
+            clean_response = response_obj.response
+        else:
+            clean_response = str(response_obj)
+            
+        return clean_response
     except Exception as e:
         return f"Error processing query: {str(e)}"
-
+    
 # Main app function
 def main():
     # App header with logo
