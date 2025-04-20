@@ -1,7 +1,6 @@
 import streamlit as st
 import os
 import sys
-import config
 from llama_index.core import StorageContext, load_index_from_storage
 
 # Set page configuration
@@ -56,8 +55,9 @@ def load_vector_index():
     """Load the LlamaIndex from storage"""
     try:
         # Set OpenAI API key from config
-        os.environ['OPENAI_API_KEY'] = config.OPENAI_API_KEY
-        
+        os.environ['OPENAI_API_KEY'] = st.secrets["OPENAI_API_KEY"]
+
+
         # Load the index from storage
         storage_context = StorageContext.from_defaults(persist_dir="index_10k_storage")
         index = load_index_from_storage(storage_context)
